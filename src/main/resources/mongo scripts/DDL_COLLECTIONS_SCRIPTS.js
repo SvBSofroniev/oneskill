@@ -2,12 +2,8 @@ db.createCollection("Users", {
    validator: {
       $jsonSchema: {
          bsonType: "object",
-         required: ["user_id", "username", "email", "password", "role", "created_at", "updated_at"],
+         required: ["username", "email", "password", "role", "created_at", "firstname", "lastname","updated_at"],
          properties: {
-            user_id: {
-               bsonType: "string",
-               description: "Unique identifier for the user"
-            },
             username: {
                bsonType: "string",
                description: "User's name"
@@ -32,13 +28,21 @@ db.createCollection("Users", {
             updated_at: {
                bsonType: "date",
                description: "Timestamp of last account update"
+            },
+            firstname: {
+               bsonType: "string",
+               description: "User's first name"
+            },
+            lastname: {
+               bsonType: "string",
+               description: "User's last name"
             }
          }
       }
    }
 });
 
-db.Users.createIndex({ user_id: 1 }, { unique: true });
+db.Users.createIndex({ username: 1 }, { unique: true });
 db.Users.createIndex({ email: 1 }, { unique: true });
 
 db.createCollection("Videos", {
