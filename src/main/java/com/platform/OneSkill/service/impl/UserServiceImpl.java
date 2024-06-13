@@ -2,7 +2,7 @@ package com.platform.OneSkill.service.impl;
 
 import com.platform.OneSkill.dto.UserDTO;
 import com.platform.OneSkill.persistance.models.User;
-import com.platform.OneSkill.persistance.repository.UserRepository;
+import com.platform.OneSkill.persistance.repository.nonreactive.UserRepository;
 import com.platform.OneSkill.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

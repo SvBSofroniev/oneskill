@@ -2,16 +2,18 @@ package com.platform.OneSkill.service.impl;
 
 import com.platform.OneSkill.dto.VideoDTO;
 import com.platform.OneSkill.persistance.models.Video;
-import com.platform.OneSkill.persistance.repository.VideoRepository;
+import com.platform.OneSkill.persistance.repository.reactive.VideoRepository;
 import com.platform.OneSkill.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -46,7 +48,8 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Optional<Video> getVideoByUsernameAndTitle(String username, String title) {
-        return videoRepository.findByUsernameAndTitle(username, title);
+    public Mono<Resource> getVideoByUsernameAndTitle(String username, String title) {
+        return videoRepository.findByUsernameAndTitle(username, title)
+                .map(video -> new ByteArrayResource(video.getVideoData()));
     }
 }

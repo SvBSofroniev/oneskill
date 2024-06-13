@@ -1,4 +1,4 @@
-package com.platform.OneSkill.persistance.repository;
+package com.platform.OneSkill.persistance.repository.nonreactive;
 
 import com.platform.OneSkill.persistance.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
