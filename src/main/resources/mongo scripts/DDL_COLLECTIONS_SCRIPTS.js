@@ -22,11 +22,11 @@ db.createCollection("Users", {
                description: "Role of the user (e.g., 'dev', 'user')"
             },
             created_at: {
-               bsonType: "date",
+               bsonType: "string",
                description: "Timestamp of account creation"
             },
             updated_at: {
-               bsonType: "date",
+               bsonType: "string",
                description: "Timestamp of last account update"
             },
             firstname: {
@@ -72,7 +72,7 @@ db.createCollection("Videos", {
                description: "Binary data of the video thumbnail"
             },
             upload_date: {
-               bsonType: "date",
+               bsonType: "string",
                description: "Timestamp of when the video was uploaded"
             },
             status: {
@@ -131,7 +131,7 @@ db.createCollection("Comments", {
                description: "The comment text"
             },
             timestamp: {
-               bsonType: "date",
+               bsonType: "string",
                description: "When the comment was made"
             }
          }
@@ -168,7 +168,7 @@ db.createCollection("Ratings", {
                description: "Rating value (e.g., 1 to 5 stars)"
             },
             timestamp: {
-               bsonType: "date",
+               bsonType: "string",
                description: "When the rating was made"
             }
          }
@@ -203,7 +203,7 @@ db.createCollection("LikesDislikes", {
                description: "Type of interaction (e.g., 'like', 'dislike')"
             },
             timestamp: {
-               bsonType: "date",
+               bsonType: "string",
                description: "When the like/dislike was made"
             }
          }
@@ -235,7 +235,7 @@ db.createCollection("Shares", {
                description: "Identifier of the user who shared the video"
             },
             timestamp: {
-               bsonType: "date",
+               bsonType: "string",
                description: "When the video was shared"
             },
             platform: {

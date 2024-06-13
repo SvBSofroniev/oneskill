@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
+
+import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 
 @Slf4j
 @Service
@@ -23,28 +26,29 @@ public class VideoServiceImpl implements VideoService {
     private final VideoRepository videoRepository;
     @Transactional
     @Override
-    public boolean uploadVideo(VideoDTO dto) {
+    public Mono<Boolean> uploadVideo(VideoDTO dto) {
+        return Mono.fromSupplier(() -> {
+                    Video video = new Video();
+                    video.setUsername(dto.getUsername());
+                    video.setTitle(dto.getTitle());
+                    video.setDescription(dto.getDescription());
+                    try {
+                    video.setVideoData(dto.getVideoFile().getBytes());
 
-        try {
-            Video video = new Video();
-            video.setUsername(dto.getUsername());
-            video.setTitle(dto.getTitle());
-            video.setDescription(dto.getDescription());
-            video.setVideoData(dto.getVideoFile().getBytes());
-            video.setThumbnailData(dto.getThumbnailFile().getBytes());
-            video.setUploadDate(Date.from(Instant.now()));
-            video.setStatus("active");
-            video.setLikes(0);
-            video.setDislikes(0);
-            video.setSharedCount(0);
-            video.setViews(0);
-            videoRepository.save(video);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            return false;
-        }
-
-        return true;
+                        video.setThumbnailData(dto.getThumbnailFile().getBytes());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    video.setUploadDate(getCurrentZonedDateTime());
+                    video.setStatus("active");
+                    video.setLikes(0);
+                    video.setDislikes(0);
+                    video.setSharedCount(0);
+                    video.setViews(0);
+                    return video;
+                }).flatMap(videoRepository::save)
+                .map(savedVideo -> true)
+                .onErrorReturn(false);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class Share {
     @Indexed
     private String userId;
 
-    private Date timestamp;
+    private String timestamp;
     private String platform;
 
     // Getters and setters

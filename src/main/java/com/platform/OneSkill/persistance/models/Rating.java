@@ -26,5 +26,5 @@ public class Rating {
     private String userId;
 
     private int rating;
-    private Date timestamp;
+    private String timestamp;
 }

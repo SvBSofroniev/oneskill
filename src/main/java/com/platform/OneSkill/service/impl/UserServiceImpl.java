@@ -9,9 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+
 import java.util.Base64;
-import java.util.Date;
+
+import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 
 @Slf4j
 @Service
@@ -25,18 +26,14 @@ public class UserServiceImpl implements UserService{
     public boolean createUser(UserDTO dto) {
         try {
             User user = new User();
-            user.setRole(dto.getRole());
-            user.setPassword(Base64.getEncoder().encodeToString(dto.getPassword().getBytes()));
-
-            System.out.printf(user.getPassword());
-            log.info(Base64.getEncoder().encodeToString(dto.getPassword().getBytes()));
-
-            user.setFirstname(dto.getFirstname());
-            user.setLastname(dto.getLastname());
-            user.setUsername(dto.getUsername());
-            user.setEmail(dto.getEmail());
-            user.setCreatedAt(Date.from(Instant.now()));
-            user.setUpdatedAt(Date.from(Instant.now()));
+            user.setRole(dto.role());
+            user.setPassword(Base64.getEncoder().encodeToString(dto.password().getBytes()));
+            user.setFirstname(dto.firstname());
+            user.setLastname(dto.lastname());
+            user.setUsername(dto.username());
+            user.setEmail(dto.email());
+            user.setCreatedAt(getCurrentZonedDateTime());
+            user.setUpdatedAt(getCurrentZonedDateTime());
             userRepository.save(user);
             return true;
         }catch (Exception e){

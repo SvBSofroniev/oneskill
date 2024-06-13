@@ -27,6 +27,6 @@ public class Comment {
     private String userId;
 
     private String content;
-    private Date timestamp;
+    private String timestamp;
 
 }

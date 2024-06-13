@@ -16,10 +16,8 @@ public class VideoController {
 
     private final VideoService videoService;
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadVideo(@ModelAttribute VideoDTO videoDTO){
-        return videoService.uploadVideo(videoDTO)
-                ? ResponseEntity.status(HttpStatus.CREATED).body("Video has been uploaded.")
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Video hasn't been uploaded.");
+    public Mono<Boolean> uploadVideo(@ModelAttribute VideoDTO videoDTO){
+        return videoService.uploadVideo(videoDTO);
     }
 
     @GetMapping(value = "/stream", produces = "video/mp4")

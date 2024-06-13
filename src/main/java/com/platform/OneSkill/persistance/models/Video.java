@@ -31,7 +31,7 @@ public class Video {
     private byte[] thumbnailData;
 
     @Field("upload_date")
-    private Date uploadDate;
+    private String uploadDate;
     private String status;
     private int views;
     private int likes;

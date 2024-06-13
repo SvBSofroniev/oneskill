@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 
 public interface VideoService {
-    boolean uploadVideo(VideoDTO videoDTO);
+    Mono<Boolean> uploadVideo(VideoDTO videoDTO);
 
     Mono<Resource> getVideoByUsernameAndTitle(String username, String title);
 }

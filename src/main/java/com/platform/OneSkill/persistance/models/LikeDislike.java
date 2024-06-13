@@ -27,6 +27,6 @@ public class LikeDislike {
     private String userId;
 
     private String type; // "like" or "dislike"
-    private Date timestamp;
+    private String timestamp;
 
 }
