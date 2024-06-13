@@ -5,9 +5,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,8 +22,7 @@ public class User {
     private String firstname;
     private String lastname;
     private String password;
-    private String role;
-
+    private List<String> roles;
     @Field("created_at")
     private String createdAt;
     @Field("updated_at")

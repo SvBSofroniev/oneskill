@@ -3,23 +3,24 @@ package com.platform.OneSkill.service.impl;
 import com.platform.OneSkill.dto.SignupRequest;
 import com.platform.OneSkill.persistance.models.User;
 import com.platform.OneSkill.persistance.repository.nonreactive.UserRepository;
-import com.platform.OneSkill.service.AuthService;
+import com.platform.OneSkill.service.UserService;
+import com.platform.OneSkill.util.RolesEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
-
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -30,8 +31,8 @@ public class AuthServiceImpl implements AuthService {
 
         try {
             User user = new User();
-            user.setRole("user");
-            user.setPassword(passwordEncoder.encode(signupRequest.password()));
+            user.setRoles(List.of(RolesEnum.USER.name));
+            user.setPassword(signupRequest.password());
             user.setFirstname(signupRequest.firstname());
             user.setLastname(signupRequest.lastname());
             user.setUsername(signupRequest.username());

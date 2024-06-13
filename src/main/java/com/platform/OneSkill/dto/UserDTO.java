@@ -1,10 +1,13 @@
 package com.platform.OneSkill.dto;
 
+import java.util.List;
+
 public record UserDTO(
         String firstname,
         String lastname,
         String email,
         String username,
-        String password,
-        String role
+        List<String> role,
+        String createdAt,
+        String updatedAt
 ) {}

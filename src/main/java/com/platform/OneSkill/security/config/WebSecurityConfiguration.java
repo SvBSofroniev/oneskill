@@ -1,4 +1,4 @@
-package com.platform.OneSkill.config;
+package com.platform.OneSkill.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -23,9 +21,5 @@ public class WebSecurityConfiguration {
                     registry.requestMatchers("/signup").permitAll();
                     registry.anyRequest().authenticated();
                 }).formLogin(AbstractAuthenticationFilterConfigurer::permitAll).build();
-    }
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 }
