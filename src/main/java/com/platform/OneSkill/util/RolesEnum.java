@@ -1,6 +1,8 @@
 package com.platform.OneSkill.util;
 
+import lombok.Getter;
 
+@Getter
 public enum RolesEnum {
     DEV("dev"),
     USER("user");
@@ -11,7 +13,4 @@ public enum RolesEnum {
         this.value = value;
     }
 
-    public String getValue(){
-        return value;
-    }
 }
