@@ -2,11 +2,16 @@ package com.platform.OneSkill.util;
 
 
 public enum RolesEnum {
-    DEV("developer"),
+    DEV("dev"),
     USER("user");
 
-    public final String name;
-    private RolesEnum(String name){
-        this.name = name;
+    private final String value;
+
+    RolesEnum(String value){
+        this.value = value;
+    }
+
+    public String getValue(){
+        return value;
     }
 }

@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         try {
             User user = new User();
-            user.setRoles(List.of(RolesEnum.USER.name));
+            user.setRoles(List.of(RolesEnum.DEV.getValue()));
             user.setPassword(encoder.encode(signupRequest.password()));
             user.setFirstname(signupRequest.firstname());
             user.setLastname(signupRequest.lastname());
@@ -55,6 +55,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             log.error(e.getMessage());
             return "User wasn't created.";
         }
+    }
+
+    @Override
+    public UserDTO findByUsername(String username) {
+        Optional<User> foundUser = userRepository.findByUsername(username);
+        return foundUser.map(UserMapper::mapModelToRecord).orElse(null);
     }
 
     @Override

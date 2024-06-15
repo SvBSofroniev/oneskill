@@ -2,7 +2,7 @@ db.createCollection("Users", {
    validator: {
       $jsonSchema: {
          bsonType: "object",
-         required: ["username", "email", "password", "role", "created_at", "firstname", "lastname","updated_at"],
+         required: ["username", "email", "password", "roles", "created_at", "firstname", "lastname", "updated_at"],
          properties: {
             username: {
                bsonType: "string",
@@ -17,9 +17,13 @@ db.createCollection("Users", {
                bsonType: "string",
                description: "Hashed password"
             },
-            role: {
-               enum: ["dev", "user"],
-               description: "Role of the user (e.g., 'dev', 'user')"
+            roles: {
+               bsonType: "array",
+               description: "List of roles for the user",
+               items: {
+                  bsonType: "string",
+                  enum: ["user", "dev"]
+               }
             },
             created_at: {
                bsonType: "string",
@@ -41,7 +45,6 @@ db.createCollection("Users", {
       }
    }
 });
-
 db.Users.createIndex({ username: 1 }, { unique: true });
 db.Users.createIndex({ email: 1 }, { unique: true });
 

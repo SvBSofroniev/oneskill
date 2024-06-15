@@ -6,20 +6,21 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserInfoDetails implements UserDetails {
     private final String name;
     private final String password;
-    private final List<GrantedAuthority> authorities;
+    private final Set<SimpleGrantedAuthority> authorities;
 
     public UserInfoDetails(UserDTO userDTO){
         name = userDTO.username();
         password = userDTO.password();
-        authorities = userDTO.roles().stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        authorities = new HashSet<>();
+        authorities.addAll(userDTO.roles().stream().map(SimpleGrantedAuthority::new).toList());
     }
 
     @Override

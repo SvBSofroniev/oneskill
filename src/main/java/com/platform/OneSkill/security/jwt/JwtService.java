@@ -5,30 +5,41 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class JwtService {
-    public static final String SECRET = "9D0EB6B1C2E1FAD0F53A248F6C3B5E4E2F6D8G3H1I0J7K4L1M9N2O3P5Q0R7S9T1U4V2W6X0Y3Z";
+    public static final String SECRET = "kwPetdWOuCsxkU1oxXDxLPwoX7YRh6Ck9rJNiXSFi63NZ896SsnVZK2MYAXnjiP";
 
-    public String generateToken(String userName) {
+
+    public String generateToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
-    }
-    private String createToken(Map<String, Object> claims, String userName) {
-        return Jwts.builder()
+        claims.put("role", authorities);
+
+         String token = Jwts.builder()
+                .setHeaderParam("typ","JWT" )
                 .setClaims(claims)
-                .setSubject(userName)
+                .setSubject(authentication.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+
+        log.info("Generated token for user: " + authentication.getName());
+        return token;
     }
 
     private Key getSignKey() {
@@ -49,6 +60,11 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+    public String[] extractRoles(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("roles", String.class).split(",");
+    }
+
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
@@ -57,7 +73,7 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
     public Boolean validateToken(String token, UserDetails userDetails) {

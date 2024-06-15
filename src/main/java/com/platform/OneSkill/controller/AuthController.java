@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class UserController {
+public class AuthController {
     private final UserService userService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -34,15 +34,10 @@ public class UserController {
                         authRequest.username(),
                         authRequest.password()));
         if (authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(authRequest.username());
+            String token = jwtService.generateToken(authentication);
             return ResponseEntity.ok(token);
         } else {
             throw new UsernameNotFoundException("Invalid user request!");
         }
-    }
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello World!";
     }
 }

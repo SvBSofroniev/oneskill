@@ -4,12 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-@Getter
-@Setter
-public class VideoDTO {
-    private String username;
-    private String title;
-    private String description;
-    private MultipartFile videoFile;
-    private MultipartFile thumbnailFile;
+public record VideoDTO (
+    String username,
+    String title,
+    String description,
+    MultipartFile videoFile,
+    MultipartFile thumbnailFile
+){
 }

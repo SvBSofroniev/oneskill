@@ -12,10 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-import java.time.Instant;
-import java.util.Date;
-
 import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 
 @Slf4j
@@ -24,36 +20,47 @@ import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 public class VideoServiceImpl implements VideoService {
 
     private final VideoRepository videoRepository;
-    @Transactional
     @Override
+    @Transactional
     public Mono<Boolean> uploadVideo(VideoDTO dto) {
-        return Mono.fromSupplier(() -> {
-                    Video video = new Video();
-                    video.setUsername(dto.getUsername());
-                    video.setTitle(dto.getTitle());
-                    video.setDescription(dto.getDescription());
-                    try {
-                    video.setVideoData(dto.getVideoFile().getBytes());
+        Mono<Video> videoMono = Mono.fromSupplier(() -> {
+            Video video = new Video();
+            video.setUsername(dto.username());
+            video.setTitle(dto.title());
+            video.setDescription(dto.description());
 
-                        video.setThumbnailData(dto.getThumbnailFile().getBytes());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    video.setUploadDate(getCurrentZonedDateTime());
-                    video.setStatus("active");
-                    video.setLikes(0);
-                    video.setDislikes(0);
-                    video.setSharedCount(0);
-                    video.setViews(0);
-                    return video;
-                }).flatMap(videoRepository::save)
-                .map(savedVideo -> true)
-                .onErrorReturn(false);
+            try {
+                video.setVideoData(dto.videoFile().getBytes());
+                video.setThumbnailData(dto.thumbnailFile().getBytes());
+            } catch (Exception e) {
+                System.err.println("Error while reading file: " + e.getMessage());
+                throw new RuntimeException(e);
+            }
+
+            video.setUploadDate(getCurrentZonedDateTime());
+            video.setStatus("active");
+            video.setLikes(0);
+            video.setDislikes(0);
+            video.setSharedCount(0);
+            video.setViews(0);
+
+            return video;
+        });
+
+        Mono<Video> savedVideoMono = videoMono.flatMap(videoRepository::save);
+
+        Mono<Boolean> resultMono = savedVideoMono.map(savedVideo -> true);
+
+        Mono<Boolean> finalResultMono = resultMono.onErrorReturn(false);
+
+        return finalResultMono;
     }
 
     @Override
     public Mono<Resource> getVideoByUsernameAndTitle(String username, String title) {
+
         return videoRepository.findByUsernameAndTitle(username, title)
                 .map(video -> new ByteArrayResource(video.getVideoData()));
+
     }
 }
