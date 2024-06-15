@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.multipart.MultipartResolver;
 
 @Configuration
 @EnableWebSecurity
@@ -37,7 +36,6 @@ public class SecurityConfig  {
                         .requestMatchers(  "/videos/hello").hasAnyAuthority(
                                 RolesEnum.DEV.getValue(),
                                 RolesEnum.USER.getValue())
-//                        .requestMatchers("/videos/stream").hasAnyAuthority(RolesEnum.DEV.getValue())
                         .requestMatchers("/videos/stream", "/videos/upload").permitAll()
                         .requestMatchers("/auth/generateToken", "/auth/register" ).permitAll()
 

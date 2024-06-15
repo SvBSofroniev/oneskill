@@ -51,9 +51,7 @@ public class VideoServiceImpl implements VideoService {
 
         Mono<Boolean> resultMono = savedVideoMono.map(savedVideo -> true);
 
-        Mono<Boolean> finalResultMono = resultMono.onErrorReturn(false);
-
-        return finalResultMono;
+        return resultMono.onErrorReturn(false);
     }
 
     @Override
