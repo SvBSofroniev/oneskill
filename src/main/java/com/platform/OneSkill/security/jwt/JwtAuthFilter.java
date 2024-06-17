@@ -20,7 +20,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Order(1)
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
