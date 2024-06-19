@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 import static com.platform.OneSkill.util.mapper.UserMapper.mapModelToRecord;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         try {
             User user = new User();
-            user.setRoles(List.of(RolesEnum.DEV.getValue()));
+            user.setRoles(Set.of(RolesEnum.DEV.getValue()));
             user.setPassword(encoder.encode(signupRequest.password()));
             user.setFirstname(signupRequest.firstname());
             user.setLastname(signupRequest.lastname());
@@ -60,7 +61,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public UserDTO findByUsername(String username) {
         Optional<User> foundUser = userRepository.findByUsername(username);
-        return foundUser.map(UserMapper::mapModelToRecord).orElse(null);
+        return foundUser.map(UserMapper::mapModelToRecord)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
     }
 
     @Override
