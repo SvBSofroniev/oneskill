@@ -34,12 +34,11 @@ public class SecurityConfig  {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(
-                                "/videos/hello",
-                                "/videos/upload").hasAnyAuthority(
-                                RolesEnum.DEV.getValue(),
-                                RolesEnum.USER.getValue())
-                        .requestMatchers("/auth/login", "/auth/register","/videos/stream" ).permitAll()
+                        .requestMatchers("/videos/hello", "/videos/upload")
+                            .hasAnyAuthority(
+                                    RolesEnum.DEV.getValue(),
+                                    RolesEnum.USER.getValue())
+                        .requestMatchers("/auth/login", "/auth/register", "/videos/stream" ).permitAll()
 
                         .anyRequest().authenticated()
                 )

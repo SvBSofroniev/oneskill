@@ -27,6 +27,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     public ResponseEntity<?> handle403(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("");
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseEntity<?> handle403(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found.");
     }
 }

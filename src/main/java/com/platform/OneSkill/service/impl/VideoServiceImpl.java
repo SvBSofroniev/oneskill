@@ -1,8 +1,11 @@
 package com.platform.OneSkill.service.impl;
 
+import com.platform.OneSkill.dto.UserDTO;
 import com.platform.OneSkill.dto.VideoDTO;
+import com.platform.OneSkill.persistance.models.User;
 import com.platform.OneSkill.persistance.models.Video;
 import com.platform.OneSkill.persistance.repository.reactive.VideoRepository;
+import com.platform.OneSkill.service.UserService;
 import com.platform.OneSkill.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 
 @Slf4j
@@ -20,6 +25,8 @@ import static com.platform.OneSkill.util.TimeUtil.getCurrentZonedDateTime;
 public class VideoServiceImpl implements VideoService {
 
     private final VideoRepository videoRepository;
+    private final UserService userService;
+
     @Override
     @Transactional
     public Mono<Boolean> uploadVideo(VideoDTO dto) {
@@ -56,6 +63,10 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public Mono<Resource> getVideoByUsernameAndTitle(String username, String title) {
+
+        UserDTO currentUser =  userService.findByUsername(username);
+
+
 
         return videoRepository.findByUsernameAndTitle(username, title)
                 .map(video -> new ByteArrayResource(video.getVideoData()));

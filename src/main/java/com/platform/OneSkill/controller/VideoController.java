@@ -11,10 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +35,6 @@ public class VideoController {
 
     private final VideoService videoService;
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
 
     @PostMapping("/upload")
     public Mono<Boolean> uploadVideo(@ModelAttribute VideoDTO videoDTO){
@@ -44,12 +45,14 @@ public class VideoController {
     @GetMapping(value = "/stream", produces = "video/mp4")
     public Mono<Resource> streamVideo(@RequestParam String username,
                                       @RequestParam String title) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDTO userDTO = userService.findByUsername(username);
-        if (userDTO != null && userDTO.roles().contains(RolesEnum.DEV.getValue())){
+        if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(RolesEnum.DEV.getValue()) ||
+                a.getAuthority().equals(RolesEnum.USER.getValue()))) {
             return videoService.getVideoByUsernameAndTitle(username, title);
-        }else {
-            throw new UsernameNotFoundException("Not found user");
+        } else {
+            // Handle unauthorized access as needed
+            throw new AccessDeniedException("Unauthorized access");
         }
     }
 
