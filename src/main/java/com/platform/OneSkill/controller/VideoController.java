@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
