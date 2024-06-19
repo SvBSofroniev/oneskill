@@ -29,8 +29,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        log.info("Request URL: " + request.getRequestURL());
-        log.info("Authorization Header: " + request.getHeader("Authorization"));
+        log.info("Request URL: {}", request.getRequestURL());
+        log.info("Authorization Header: {}", request.getHeader("Authorization"));
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
@@ -39,7 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             username = jwtService.extractUsername(token);
-            log.info("Extracted username from token: " + username);
+            log.info("Extracted username from token: {}", username);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -49,9 +49,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                log.info("User authenticated: " + username);
+                log.info("User authenticated: {}", username);
             } else {
-                log.error("Token validation failed for user: " + username);
+                log.error("Token validation failed for user: {}", username);
             }
         } else {
             log.error("No username found or user already authenticated");
