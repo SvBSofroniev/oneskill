@@ -4,7 +4,7 @@ import com.platform.OneSkill.dto.SignupRequest;
 import com.platform.OneSkill.dto.UserDTO;
 import com.platform.OneSkill.exception.UserNotFoundException;
 import com.platform.OneSkill.persistance.models.User;
-import com.platform.OneSkill.persistance.repository.nonreactive.UserRepository;
+import com.platform.OneSkill.persistance.repository.UserRepository;
 import com.platform.OneSkill.security.dto.UserInfoDetails;
 import com.platform.OneSkill.service.UserService;
 import com.platform.OneSkill.util.RolesEnum;
@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
