@@ -63,7 +63,7 @@ db.createCollection("Videos", {
    validator: {
       $jsonSchema: {
          bsonType: "object",
-         required: ["username", "title", "description", "video_id", "thumbnail_id", "upload_date", "status", "views", "likes", "dislikes", "shared_count"],
+         required: ["username", "title", "description", "upload_date", "status", "views", "likes", "dislikes", "shared_count"],
          properties: {
             username: {
                bsonType: "string",
@@ -120,7 +120,7 @@ db.createCollection("Videos", {
 
 
 db.Videos.createIndex({ title: 1 }, { unique: true });
-db.Videos.createIndex({ username: 1 }, {unique: true});
+db.Videos.createIndex({ username: 1 });
 
 db.createCollection("Comments", {
    validator: {

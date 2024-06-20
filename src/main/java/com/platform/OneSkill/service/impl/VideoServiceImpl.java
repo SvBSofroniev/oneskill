@@ -40,21 +40,24 @@ public class VideoServiceImpl implements VideoService {
     @Override
     @Transactional
     public boolean uploadVideo(VideoDTO dto) throws IOException {
-        ObjectId videoId = saveFile(dto, dto.videoFile());
-        ObjectId thumbnailId = saveFile(dto, dto.thumbnailFile());
+
 
         Video video = new Video();
         video.setUsername(dto.username());
         video.setTitle(dto.title());
         video.setDescription(dto.description());
-        video.setVideoId(videoId);
-        video.setThumbnailId(thumbnailId);
         video.setUploadDate(TimeUtil.getCurrentZonedDateTime());
         video.setStatus(VideoStatus.ACTIVE.getValue());
         video.setViews(0);
         video.setLikes(0);
         video.setDislikes(0);
         video.setSharedCount(0);
+        video = videoRepository.save(video);
+
+        ObjectId videoId = saveFile(dto, dto.videoFile());
+        ObjectId thumbnailId = saveFile(dto, dto.thumbnailFile());
+        video.setVideoId(videoId);
+        video.setThumbnailId(thumbnailId);
         videoRepository.save(video);
         return true;
     }
