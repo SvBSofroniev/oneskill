@@ -1,3 +1,5 @@
+use oneskill
+
 db.Users.drop();
 db.Videos.drop();
 db.Thumbnails.drop();
@@ -118,7 +120,7 @@ db.createCollection("Videos", {
 
 
 db.Videos.createIndex({ title: 1 }, { unique: true });
-db.Videos.createIndex({ username: 1 }{unique: true});
+db.Videos.createIndex({ username: 1 }, {unique: true});
 
 db.createCollection("Comments", {
    validator: {
@@ -187,6 +189,7 @@ db.createCollection("Ratings", {
       }
    }
 });
+
 db.Ratings.createIndex({ rating_id: 1 }, { unique: true });
 db.Ratings.createIndex({ video_id: 1 });
 db.Ratings.createIndex({ user_id: 1 });

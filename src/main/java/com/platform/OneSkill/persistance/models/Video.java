@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Setter
@@ -24,10 +25,13 @@ public class Video {
 
     private String description;
 
+    @Field("video_id")
     private ObjectId videoId;
 
+    @Field("thumbnail_id")
     private ObjectId thumbnailId;
 
+    @Field("upload_date")
     private String uploadDate;
 
     private String status;
@@ -38,5 +42,6 @@ public class Video {
 
     private int dislikes;
 
+    @Field("shared_count")
     private int sharedCount;
 }
