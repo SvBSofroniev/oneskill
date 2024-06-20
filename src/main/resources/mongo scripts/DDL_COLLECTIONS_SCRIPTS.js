@@ -1,3 +1,12 @@
+db.Users.drop();
+db.Videos.drop();
+db.Thumbnails.drop();
+db.Comments.drop();
+db.Ratings.drop();
+db.LikesDislikes.drop();
+db.Shares.drop();
+db.RolesPermissions.drop();
+
 db.createCollection("Users", {
    validator: {
       $jsonSchema: {
@@ -52,7 +61,7 @@ db.createCollection("Videos", {
    validator: {
       $jsonSchema: {
          bsonType: "object",
-         required: ["username", "title", "description", "video_data", "thumbnail_data", "upload_date", "status", "views", "likes", "dislikes", "shared_count"],
+         required: ["username", "title", "description", "video_id", "thumbnail_id", "upload_date", "status", "views", "likes", "dislikes", "shared_count"],
          properties: {
             username: {
                bsonType: "string",
@@ -66,13 +75,13 @@ db.createCollection("Videos", {
                bsonType: "string",
                description: "Description of the video"
             },
-            video_data: {
-               bsonType: "binData",
-               description: "Binary data of the video file"
+            video_id: {
+               bsonType: "objectId",
+               description: "ObjectId of the video file stored in GridFS"
             },
-            thumbnail_data: {
-               bsonType: "binData",
-               description: "Binary data of the video thumbnail"
+            thumbnail_id: {
+               bsonType: "objectId",
+               description: "ObjectId of the video thumbnail stored in GridFS"
             },
             upload_date: {
                bsonType: "string",
@@ -107,9 +116,9 @@ db.createCollection("Videos", {
    }
 });
 
-db.Videos.createIndex({ title: 1 }, { unique: true });
-db.Videos.createIndex({ username: 1 });
 
+db.Videos.createIndex({ title: 1 }, { unique: true });
+db.Videos.createIndex({ username: 1 }{unique: true});
 
 db.createCollection("Comments", {
    validator: {
