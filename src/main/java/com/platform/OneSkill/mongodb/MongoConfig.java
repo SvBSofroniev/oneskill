@@ -4,6 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "com.platform.OneSkill.persistance.repository.nonreactive")
+@EnableMongoRepositories(basePackages = "com.platform.OneSkill.persistance.repository")
 public class MongoConfig {
 }

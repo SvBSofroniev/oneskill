@@ -1,12 +1,13 @@
 package com.platform.OneSkill.service;
 
 import com.platform.OneSkill.dto.VideoDTO;
-import org.springframework.core.io.Resource;
-import reactor.core.publisher.Mono;
+import com.platform.OneSkill.dto.VideoResponseDTO;
+import java.io.IOException;
+
 
 
 public interface VideoService {
-    Mono<Boolean> uploadVideo(VideoDTO videoDTO);
+    boolean uploadVideo(VideoDTO videoDTO) throws IOException;
 
-    Mono<Resource> getVideoByUsernameAndTitle(String username, String title);
+    VideoResponseDTO getVideo(String id) throws IOException;
 }
