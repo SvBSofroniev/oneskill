@@ -32,9 +32,12 @@ public class SecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            AuthenticationProvider authenticationProvider) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/videos/hello", "/videos/upload", "/videos/stream" )
+                        .requestMatchers(
+                                "/videos/hello"
+                                , "/videos/upload"
+                                , "/videos/stream"
+                                , "/users/**")
                             .hasAnyAuthority(
                                     RolesEnum.DEV.getValue(),
                                     RolesEnum.USER.getValue())

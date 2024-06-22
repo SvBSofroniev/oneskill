@@ -37,7 +37,7 @@ public class AuthController {
                         authRequest.username(),
                         authRequest.password()));
         if (authentication.isAuthenticated()) {
-            TokenDTO token = new TokenDTO(jwtService.generateToken(authentication));
+            TokenDTO token = new TokenDTO(jwtService.generateToken(authentication), authRequest.username());
             return ResponseEntity.ok(token);
         } else {
             throw new UsernameNotFoundException("Invalid user request!");

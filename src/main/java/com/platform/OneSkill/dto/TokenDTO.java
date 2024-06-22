@@ -1,6 +1,7 @@
 package com.platform.OneSkill.dto;
 
 public record TokenDTO(
-        String token
+        String token,
+        String username
 ) {
 }

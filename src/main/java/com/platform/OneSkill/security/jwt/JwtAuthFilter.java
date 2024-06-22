@@ -31,8 +31,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         log.info("Request URL: {}", request.getRequestURL());
         log.info("Authorization Header: {}", request.getHeader("Authorization"));
+        log.info("authorization Header: {}", request.getHeader("authorization"));
+        log.info("Request URL: {}", request.getRequestURL());
 
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("authorization");
         String token = null;
         String username = null;
 
