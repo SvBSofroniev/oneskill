@@ -27,6 +27,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,11 +48,11 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     @Transactional
-    public boolean uploadVideo(VideoUploadDTO dto) throws IOException {
+    public boolean uploadVideo(String username, VideoUploadDTO dto) throws IOException {
 
 
         Video video = new Video();
-        video.setUsername(dto.username());
+        video.setUsername(username);
         video.setTitle(dto.title());
         video.setDescription(dto.description());
         video.setUploadDate(TimeUtil.getCurrentZonedDateTime());
@@ -62,8 +63,8 @@ public class VideoServiceImpl implements VideoService {
         video.setSharedCount(0);
         video = videoRepository.save(video);
 
-        ObjectId videoId = saveFile(dto, dto.videoFile());
-        ObjectId thumbnailId = saveFile(dto, dto.thumbnailFile());
+        ObjectId videoId = saveFile(username,dto, dto.videoFile());
+        ObjectId thumbnailId = saveFile(username, dto, dto.thumbnailFile());
         video.setVideoId(videoId);
         video.setThumbnailId(thumbnailId);
         videoRepository.save(video);
@@ -108,9 +109,14 @@ public class VideoServiceImpl implements VideoService {
         return VideoMapper.mapModelListToResponseInfoDTOList(resultList, videoThumbnailMap);
     }
 
-    private ObjectId saveFile(VideoUploadDTO dto, MultipartFile file) throws IOException {
+    @Override
+    public List<VideoInfoResponseDTO> getEnrolledVideos(String username) {
+        return List.of();
+    }
+
+    private ObjectId saveFile(String username, VideoUploadDTO dto, MultipartFile file) throws IOException {
         DBObject metaData = new BasicDBObject();
-        metaData.put(USERNAME, dto.username());
+        metaData.put(USERNAME,username);
         metaData.put(DESCRIPTION, dto.description());
         metaData.put(TITLE, dto.title());
         return gridFsTemplate.store(

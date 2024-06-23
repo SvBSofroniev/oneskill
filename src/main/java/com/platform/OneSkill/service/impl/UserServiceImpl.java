@@ -34,14 +34,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Transactional
     @Override
-    public String createUser(SignupRequest signupRequest) {
+    public boolean createUser(SignupRequest signupRequest) {
         if (userRepository.existsByUsernameAndEmail(signupRequest.username(),signupRequest.email())){
-            return "User wasn't created.";
+            return Boolean.FALSE;
         }
 
         try {
             User user = new User();
-            user.setRoles(Set.of(RolesEnum.DEV.getValue()));
+            user.setRoles(Set.of(RolesEnum.USER.getValue(), RolesEnum.DEV.getValue()));
             user.setPassword(encoder.encode(signupRequest.password()));
             user.setFirstname(signupRequest.firstname());
             user.setLastname(signupRequest.lastname());
@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             user.setCreatedAt(getCurrentZonedDateTime());
             user.setUpdatedAt(getCurrentZonedDateTime());
             userRepository.save(user);
-            return "User was created.";
+            return Boolean.TRUE;
         }catch (Exception e){
             log.error(e.getMessage());
-            return "User wasn't created.";
+            return Boolean.FALSE;
         }
     }
 

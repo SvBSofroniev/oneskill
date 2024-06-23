@@ -51,13 +51,22 @@ db.createCollection("Users", {
             lastname: {
                bsonType: "string",
                description: "User's last name"
-            }
+            },
+             enrolled: {
+                bsonType: "array",
+                description: "List of ObjectId references to enrolled videos",
+                items: {
+                   bsonType: "objectId"
+                }
+             }
          }
       }
    }
 });
 db.Users.createIndex({ username: 1 }, { unique: true });
 db.Users.createIndex({ email: 1 }, { unique: true });
+db.Users.createIndex({ enrolled: 1 });
+
 
 db.createCollection("Videos", {
    validator: {
@@ -121,6 +130,7 @@ db.createCollection("Videos", {
 
 db.Videos.createIndex({ title: 1 }, { unique: true });
 db.Videos.createIndex({ username: 1 });
+db.Users.createIndex({ enrolled: 1 });
 
 db.createCollection("Comments", {
    validator: {

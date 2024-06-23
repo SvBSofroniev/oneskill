@@ -1,6 +1,7 @@
 package com.platform.OneSkill.persistance.models;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -30,5 +31,9 @@ public class User {
     @Field("created_at")
     private String createdAt;
     @Field("updated_at")
-    private String  updatedAt;
+    private String updatedAt;
+
+    @Field("enrolled")
+    private List<ObjectId> enrolled;  // Store ObjectId instances for enrolled videos
 }
+

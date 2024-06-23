@@ -7,10 +7,13 @@ import com.platform.OneSkill.service.VideoService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +28,8 @@ public class VideoController {
     private final VideoService videoService;
 
     @PostMapping("/upload")
-    public boolean uploadVideo(@ModelAttribute VideoUploadDTO videoUploadDTO) throws IOException {
-        return videoService.uploadVideo(videoUploadDTO);
+    public boolean uploadVideo(@ModelAttribute VideoUploadDTO videoUploadDTO, Principal principal) throws IOException {
+        return videoService.uploadVideo(principal.getName(), videoUploadDTO);
     }
 
     @GetMapping(value = "/stream/{id}")
@@ -53,5 +56,10 @@ public class VideoController {
     @GetMapping("/hello")
     public String hello(){
         return "Hello";
+    }
+
+    @GetMapping("/enrolled/{username}")
+    public List<VideoInfoResponseDTO> getEnrolledVideos(@PathVariable String username){
+        return videoService.getEnrolledVideos(username);
     }
 }

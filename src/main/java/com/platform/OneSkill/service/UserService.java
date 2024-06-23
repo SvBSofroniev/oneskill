@@ -6,7 +6,7 @@ import com.platform.OneSkill.dto.UserDTO;
 import java.util.Optional;
 
 public interface UserService {
-    String createUser(SignupRequest signupRequest);
+    boolean createUser(SignupRequest signupRequest);
 
     UserDTO findByUsername(String username);
 }

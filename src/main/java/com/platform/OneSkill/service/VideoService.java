@@ -8,9 +8,11 @@ import java.util.List;
 
 
 public interface VideoService {
-    boolean uploadVideo(VideoUploadDTO videoUploadDTO) throws IOException;
+    boolean uploadVideo(String username, VideoUploadDTO videoUploadDTO) throws IOException;
 
     VideoResponseDTO getVideo(String id) throws IOException;
 
     List<VideoInfoResponseDTO> getVideosInfoData();
+
+    List<VideoInfoResponseDTO> getEnrolledVideos(String username);
 }

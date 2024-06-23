@@ -25,8 +25,8 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<String> addNewUser(@RequestBody SignupRequest signupRequest) {
-        String response = userService.createUser(signupRequest);
+    public ResponseEntity<Boolean> addNewUser(@RequestBody SignupRequest signupRequest) {
+        Boolean response = userService.createUser(signupRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -37,7 +37,7 @@ public class AuthController {
                         authRequest.username(),
                         authRequest.password()));
         if (authentication.isAuthenticated()) {
-            TokenDTO token = new TokenDTO(jwtService.generateToken(authentication), authRequest.username());
+            TokenDTO token = new TokenDTO(jwtService.generateToken(authentication), authRequest.username(), authentication.getAuthorities());
             return ResponseEntity.ok(token);
         } else {
             throw new UsernameNotFoundException("Invalid user request!");
