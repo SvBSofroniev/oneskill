@@ -1,5 +1,6 @@
 package com.platform.OneSkill.service;
 
+import com.platform.OneSkill.dto.VideoIdDTO;
 import com.platform.OneSkill.dto.VideoInfoResponseDTO;
 import com.platform.OneSkill.dto.VideoUploadDTO;
 import com.platform.OneSkill.dto.VideoResponseDTO;
@@ -14,5 +15,7 @@ public interface VideoService {
 
     List<VideoInfoResponseDTO> getVideosInfoData();
 
-    List<VideoInfoResponseDTO> getEnrolledVideos(String username);
+    List<VideoIdDTO> getEnrolledVideos(String username);
+
+    Boolean enrollToVideo(String username, String videoId);
 }

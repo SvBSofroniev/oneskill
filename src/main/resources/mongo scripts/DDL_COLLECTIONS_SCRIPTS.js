@@ -8,6 +8,7 @@ db.Ratings.drop();
 db.LikesDislikes.drop();
 db.Shares.drop();
 db.RolesPermissions.drop();
+db.EnrolledVideo.drop();
 
 db.createCollection("Users", {
    validator: {
@@ -51,14 +52,7 @@ db.createCollection("Users", {
             lastname: {
                bsonType: "string",
                description: "User's last name"
-            },
-             enrolled: {
-                bsonType: "array",
-                description: "List of ObjectId references to enrolled videos",
-                items: {
-                   bsonType: "objectId"
-                }
-             }
+            }
          }
       }
    }
@@ -130,7 +124,26 @@ db.createCollection("Videos", {
 
 db.Videos.createIndex({ title: 1 }, { unique: true });
 db.Videos.createIndex({ username: 1 });
-db.Users.createIndex({ enrolled: 1 });
+
+db.createCollection("EnrolledVideo", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["username", "videoId"],
+         properties: {
+            username: {
+               bsonType: "string",
+               description: "ObjectId of the user who enrolled in the video"
+            },
+            videoId: {
+               bsonType: "string",
+               description: "ObjectId of the video that the user enrolled in"
+            }
+         }
+      }
+   }
+});
+db.EnrolledVideo.createIndex({ username: 1, videoId: 1 }, { unique: true });
 
 db.createCollection("Comments", {
    validator: {

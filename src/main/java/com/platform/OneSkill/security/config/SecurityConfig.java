@@ -38,6 +38,8 @@ public class SecurityConfig  {
                                 "/videos/hello"
                                 , "/videos/upload"
                                 , "/videos/stream"
+                                , "/enroll/**"
+                                , "/enrolled/**"
                                 , "/users/**")
                             .hasAnyAuthority(
                                     RolesEnum.DEV.getValue(),

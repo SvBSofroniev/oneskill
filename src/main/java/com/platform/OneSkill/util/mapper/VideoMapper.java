@@ -53,7 +53,7 @@ public class VideoMapper {
         );
     }
 
-    private static String convertInputStreamToBase64(InputStream inputStream) throws IOException {
+    public static String convertInputStreamToBase64(InputStream inputStream) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[8192];
         int bytesRead;

@@ -1,6 +1,5 @@
 package com.platform.OneSkill.dto;
 
-import org.bson.types.ObjectId;
 
 public record VideoInfoResponseDTO(
         String videoId,

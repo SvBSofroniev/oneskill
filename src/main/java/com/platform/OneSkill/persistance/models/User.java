@@ -32,8 +32,5 @@ public class User {
     private String createdAt;
     @Field("updated_at")
     private String updatedAt;
-
-    @Field("enrolled")
-    private List<ObjectId> enrolled;  // Store ObjectId instances for enrolled videos
 }
 

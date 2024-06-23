@@ -1,5 +1,6 @@
 package com.platform.OneSkill.controller;
 
+import com.platform.OneSkill.dto.VideoIdDTO;
 import com.platform.OneSkill.dto.VideoInfoResponseDTO;
 import com.platform.OneSkill.dto.VideoUploadDTO;
 import com.platform.OneSkill.dto.VideoResponseDTO;
@@ -12,8 +13,6 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,8 +57,13 @@ public class VideoController {
         return "Hello";
     }
 
-    @GetMapping("/enrolled/{username}")
-    public List<VideoInfoResponseDTO> getEnrolledVideos(@PathVariable String username){
-        return videoService.getEnrolledVideos(username);
+    @GetMapping("/enrolled")
+    public List<VideoIdDTO> getEnrolledVideos(Principal principal){
+        return videoService.getEnrolledVideos(principal.getName());
+    }
+
+    @PostMapping(value = "/enroll")
+    public boolean enrollVideo(@RequestBody String id, Principal principal){
+        return videoService.enrollToVideo(principal.getName(), id);
     }
 }
