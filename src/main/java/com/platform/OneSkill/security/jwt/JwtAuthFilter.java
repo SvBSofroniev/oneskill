@@ -57,7 +57,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         } else {
             log.error("No username found or user already authenticated");
-        }
-        filterChain.doFilter(request, response);
+        }filterChain.doFilter(request, response);
     }
 }

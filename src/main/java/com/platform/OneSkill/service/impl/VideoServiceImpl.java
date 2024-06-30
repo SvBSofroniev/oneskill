@@ -46,8 +46,6 @@ public class VideoServiceImpl implements VideoService {
     @Override
     @Transactional
     public boolean uploadVideo(String username, VideoUploadDTO dto) throws IOException {
-
-
         Video video = new Video();
         video.setUsername(username);
         video.setTitle(dto.title());
