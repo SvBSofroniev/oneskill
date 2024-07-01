@@ -18,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         try {
             User user = new User();
-            user.setRoles(Set.of(RolesEnum.USER.getValue(), RolesEnum.DEV.getValue()));
+            user.setRoles(Set.of(RolesEnum.USER.getValue()));
             user.setPassword(encoder.encode(signupRequest.password()));
             user.setFirstname(signupRequest.firstname());
             user.setLastname(signupRequest.lastname());
@@ -63,6 +65,39 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         Optional<User> foundUser = userRepository.findByUsername(username);
         return foundUser.map(UserMapper::mapModelToRecord)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        List<User> foundUsers = userRepository.findAll();
+        if (!foundUsers.isEmpty()) {
+            return foundUsers.stream().map(UserMapper::mapModelToRecord).toList();
+        }
+        return new ArrayList<>();
+    }
+
+    @Transactional
+    @Override
+    public String updateRole(String username, String role) {
+        StringBuilder message = new StringBuilder();
+        RolesEnum roleEnum = RolesEnum.fromString(role);
+        if (RolesEnum.isValidRole(role)){
+            Optional<User> foundUser = userRepository.findByUsername(username);
+
+            foundUser.ifPresent(user ->{
+                assert roleEnum != null;
+                if (user.getRoles().contains(roleEnum.getValue())) {
+                    user.getRoles().remove(roleEnum.getValue());
+                    message.append("Removed");
+                }else {
+                    user.getRoles().add(roleEnum.getValue());
+                    message.append("Added");
+                }
+                userRepository.save(user);
+            });
+        }
+
+        return message.toString();
     }
 
     @Override

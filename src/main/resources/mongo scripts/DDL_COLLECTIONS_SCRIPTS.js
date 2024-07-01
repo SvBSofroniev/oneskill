@@ -34,7 +34,7 @@ db.createCollection("Users", {
                description: "List of roles for the user",
                items: {
                   bsonType: "string",
-                  enum: ["user", "dev"]
+                  enum: ["user", "dev", "lector", "admin"]
                }
             },
             created_at: {

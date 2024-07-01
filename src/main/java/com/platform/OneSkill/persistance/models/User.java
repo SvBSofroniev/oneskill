@@ -1,15 +1,10 @@
 package com.platform.OneSkill.persistance.models;
 
 import lombok.*;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -18,6 +13,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Document(collection = "Users")
 public class User {
+
+    @Id
+    private String id;
 
     private String username;
 

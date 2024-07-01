@@ -1,8 +1,10 @@
 package com.platform.OneSkill.dto;
 
+import java.util.List;
+
 public record TokenDTO(
         String token,
         String username,
-        java.util.Collection<? extends org.springframework.security.core.GrantedAuthority> roles
+        List<String> roles
 ) {
 }
