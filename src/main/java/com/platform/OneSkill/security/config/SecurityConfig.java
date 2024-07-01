@@ -40,9 +40,7 @@ public class SecurityConfig  {
                                 , "/enroll/**"
                                 , "/enrolled/**"
                                 , "/users/**")
-                            .hasAnyAuthority(
-                                    RolesEnum.DEV.getValue(),
-                                    RolesEnum.USER.getValue())
+                            .hasAnyAuthority(RolesEnum.USER.getValue())
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
 
                         .anyRequest().authenticated()

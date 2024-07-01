@@ -78,8 +78,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Transactional
     @Override
-    public String updateRole(String username, String role) {
-        StringBuilder message = new StringBuilder();
+    public void updateRole(String username, String role) {
+        String message;
         RolesEnum roleEnum = RolesEnum.fromString(role);
         if (RolesEnum.isValidRole(role)){
             Optional<User> foundUser = userRepository.findByUsername(username);
@@ -88,16 +88,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 assert roleEnum != null;
                 if (user.getRoles().contains(roleEnum.getValue())) {
                     user.getRoles().remove(roleEnum.getValue());
-                    message.append("Removed");
                 }else {
                     user.getRoles().add(roleEnum.getValue());
-                    message.append("Added");
                 }
                 userRepository.save(user);
             });
         }
-
-        return message.toString();
     }
 
     @Override

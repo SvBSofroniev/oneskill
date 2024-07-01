@@ -13,5 +13,5 @@ public interface UserService {
 
     List<UserDTO> getAllUsers();
 
-    String updateRole(String username, String role);
+    void updateRole(String username, String role);
 }
