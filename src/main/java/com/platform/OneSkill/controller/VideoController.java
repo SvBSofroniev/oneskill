@@ -51,8 +51,8 @@ public class VideoController {
         return videoService.getVideosInfoData();
     }
 
-    @GetMapping("{id}")
-    public VideoInfoResponseDTO getVideoInfoData(String id) throws IOException {
+    @GetMapping("/{id}")
+    public VideoInfoResponseDTO getVideoInfoData(@PathVariable String id) throws IOException {
         return videoService.getVideoInfoData(id);
     }
 

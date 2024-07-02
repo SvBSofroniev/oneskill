@@ -136,10 +136,21 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public VideoInfoResponseDTO getVideoInfoData(String id) {
-        Optional<Video> foundVideo = videoRepository.findById(id);
+        Optional<Video> foundVideo = videoRepository.findByVideoId(new ObjectId(id));
 
+        Video video = foundVideo.orElseThrow();
 
-        return null;
+        return new VideoInfoResponseDTO(
+                video.getId(),
+                video.getTitle(),
+                video.getDescription(),
+                video.getStatus(),
+                TimeUtil.getFormattedTime(video.getUploadDate()),
+                null,
+                video.getLikes(),
+                video.getDislikes(),
+                video.getViews()
+        );
     }
 
 

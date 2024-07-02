@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface VideoRepository extends MongoRepository<Video, String> {
 
     Optional<Video> findByUsernameAndVideoId(String username, String videoId);
+    Optional<Video> findByVideoId(ObjectId videoId);
+
 }
