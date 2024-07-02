@@ -162,6 +162,12 @@ public class VideoServiceImpl implements VideoService {
         });
     }
 
+    @Override
+    public void interactWithVideo(String id, InteractDTO interactDTO) {
+        log.info(interactDTO.username());
+        log.info(interactDTO.action());
+    }
+
 
     private ObjectId saveFile(String username, VideoUploadDTO dto, MultipartFile file) throws IOException {
         DBObject metaData = new BasicDBObject();

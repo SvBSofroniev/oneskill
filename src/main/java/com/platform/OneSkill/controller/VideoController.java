@@ -1,9 +1,6 @@
 package com.platform.OneSkill.controller;
 
-import com.platform.OneSkill.dto.VideoIdDTO;
-import com.platform.OneSkill.dto.VideoInfoResponseDTO;
-import com.platform.OneSkill.dto.VideoUploadDTO;
-import com.platform.OneSkill.dto.VideoResponseDTO;
+import com.platform.OneSkill.dto.*;
 import com.platform.OneSkill.service.VideoService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -75,5 +72,10 @@ public class VideoController {
     @PatchMapping("/{id}/view")
     public void addView(@PathVariable String id){
         videoService.registerView(id);
+    }
+
+    @PatchMapping("/{id}/interact")
+    public void interact(@PathVariable String id, @RequestBody InteractDTO interactDTO){
+        videoService.interactWithVideo(id, interactDTO);
     }
 }
