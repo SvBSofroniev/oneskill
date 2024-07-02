@@ -134,6 +134,14 @@ public class VideoServiceImpl implements VideoService {
         return false;
     }
 
+    @Override
+    public VideoInfoResponseDTO getVideoInfoData(String id) {
+        Optional<Video> foundVideo = videoRepository.findById(id);
+
+
+        return null;
+    }
+
 
     private ObjectId saveFile(String username, VideoUploadDTO dto, MultipartFile file) throws IOException {
         DBObject metaData = new BasicDBObject();

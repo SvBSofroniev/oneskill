@@ -51,6 +51,11 @@ public class VideoController {
         return videoService.getVideosInfoData();
     }
 
+    @GetMapping("{id}")
+    public VideoInfoResponseDTO getVideoInfoData(String id) throws IOException {
+        return videoService.getVideoInfoData(id);
+    }
+
 
     @GetMapping("/hello")
     public String hello(){

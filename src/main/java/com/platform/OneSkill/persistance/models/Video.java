@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Video {
 
     @Id
-    private ObjectId id;
+    private String id;
 
     @Indexed(unique = true)
     private String username;

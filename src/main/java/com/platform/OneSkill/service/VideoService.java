@@ -18,4 +18,6 @@ public interface VideoService {
     List<VideoIdDTO> getEnrolledVideos(String username);
 
     Boolean enrollToVideo(String username, String videoId);
+
+    VideoInfoResponseDTO getVideoInfoData(String id);
 }
