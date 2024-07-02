@@ -153,6 +153,15 @@ public class VideoServiceImpl implements VideoService {
         );
     }
 
+    @Override
+    public void registerView(String id) {
+        Optional<Video> foundVideo = videoRepository.findByVideoId(new ObjectId(id));
+        foundVideo.ifPresent(video -> {
+            video.setViews(video.getViews() + 1);
+            videoRepository.save(video);
+        });
+    }
+
 
     private ObjectId saveFile(String username, VideoUploadDTO dto, MultipartFile file) throws IOException {
         DBObject metaData = new BasicDBObject();

@@ -33,14 +33,11 @@ public class SecurityConfig  {
                                            AuthenticationProvider authenticationProvider) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/videos",
-                                "/videos/hello"
-                                , "/videos/upload"
-                                , "/videos/stream"
+                        .requestMatchers("/videos/**"
                                 , "/enroll/**"
                                 , "/enrolled/**"
                                 , "/users/**")
-                            .hasAnyAuthority(RolesEnum.USER.getValue())
+                            .hasAnyAuthority(RolesEnum.USER.getValue(), RolesEnum.ADMIN.getValue())
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
 
                         .anyRequest().authenticated()

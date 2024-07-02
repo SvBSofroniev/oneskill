@@ -20,4 +20,6 @@ public interface VideoService {
     Boolean enrollToVideo(String username, String videoId);
 
     VideoInfoResponseDTO getVideoInfoData(String id);
+
+    void registerView(String id);
 }

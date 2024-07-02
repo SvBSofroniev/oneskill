@@ -71,4 +71,9 @@ public class VideoController {
     public boolean enrollVideo(@RequestBody String id, Principal principal){
         return videoService.enrollToVideo(principal.getName(), id);
     }
+
+    @PatchMapping("/{id}/view")
+    public void addView(@PathVariable String id){
+        videoService.registerView(id);
+    }
 }
