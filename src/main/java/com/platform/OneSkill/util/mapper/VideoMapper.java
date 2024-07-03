@@ -5,7 +5,6 @@ import com.platform.OneSkill.dto.VideoInfoResponseDTO;
 import com.platform.OneSkill.persistance.models.Video;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.InputStreamResource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -5,10 +5,13 @@ import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.platform.OneSkill.dto.*;
 import com.platform.OneSkill.persistance.models.EnrolledVideo;
+import com.platform.OneSkill.persistance.models.LikeDislike;
 import com.platform.OneSkill.persistance.models.Video;
 import com.platform.OneSkill.persistance.repository.EnrolledVideoRepository;
+import com.platform.OneSkill.persistance.repository.LikeDislikeRepository;
 import com.platform.OneSkill.persistance.repository.VideoRepository;
 import com.platform.OneSkill.service.VideoService;
+import com.platform.OneSkill.util.InteractionEnum;
 import com.platform.OneSkill.util.TimeUtil;
 import com.platform.OneSkill.util.VideoStatus;
 
@@ -39,6 +42,7 @@ public class VideoServiceImpl implements VideoService {
     public static final String TITLE = "title";
     public static final String USERNAME = "username";
     private final VideoRepository videoRepository;
+    private final LikeDislikeRepository likeDislikeRepository;
     private final EnrolledVideoRepository enrolledVideoRepository;
     private final GridFsTemplate gridFsTemplate;
     private final GridFsOperations operations;
@@ -162,10 +166,66 @@ public class VideoServiceImpl implements VideoService {
         });
     }
 
+    @Transactional
     @Override
     public void interactWithVideo(String id, InteractDTO interactDTO) {
-        log.info(interactDTO.username());
-        log.info(interactDTO.action());
+        assert interactDTO != null;
+        assert interactDTO.action() != null;
+
+        InteractionEnum requestedAction = InteractionEnum.fromString(interactDTO.action());
+        assert requestedAction != null;
+
+        LikeDislike foundResult = likeDislikeRepository.findByVideoIdAndUsername(id, interactDTO.username());
+
+        if (foundResult != null) {
+            if (requestedAction.getValue().equals(foundResult.getType())) {
+                updateInteraction(foundResult, InteractionEnum.NONE, id, requestedAction);
+            } else {
+                updateInteraction(foundResult, requestedAction, id, requestedAction);
+            }
+        } else {
+            createNewInteraction(id, interactDTO, requestedAction);
+        }
+    }
+
+    private void updateInteraction(LikeDislike foundResult, InteractionEnum newType, String videoId, InteractionEnum requestedAction) {
+        if (!newType.getValue().equals(foundResult.getType())) {
+            Optional<Video> foundVideo = videoRepository.findById(videoId);
+            foundVideo.ifPresent(video -> {
+                adjustCounts(video, foundResult.getType(), newType.getValue());
+                videoRepository.save(video);
+            });
+            foundResult.setType(newType.getValue());
+            likeDislikeRepository.save(foundResult);
+        }
+    }
+
+    private void createNewInteraction(String videoId, InteractDTO interactDTO, InteractionEnum requestedAction) {
+        LikeDislike newInteraction = new LikeDislike();
+        newInteraction.setVideoId(videoId);
+        newInteraction.setUsername(interactDTO.username());
+        newInteraction.setType(requestedAction.getValue());
+        likeDislikeRepository.save(newInteraction);
+
+        Optional<Video> foundVideo = videoRepository.findById(videoId);
+        foundVideo.ifPresent(video -> {
+            adjustCounts(video, InteractionEnum.NONE.getValue(), requestedAction.getValue());
+            videoRepository.save(video);
+        });
+    }
+
+    private void adjustCounts(Video video, String oldType, String newType) {
+        if (InteractionEnum.LIKE.getValue().equals(oldType)) {
+            video.setLikes(video.getLikes() - 1);
+        } else if (InteractionEnum.DISLIKE.getValue().equals(oldType)) {
+            video.setDislikes(video.getDislikes() - 1);
+        }
+
+        if (InteractionEnum.LIKE.getValue().equals(newType)) {
+            video.setLikes(video.getLikes() + 1);
+        } else if (InteractionEnum.DISLIKE.getValue().equals(newType)) {
+            video.setDislikes(video.getDislikes() + 1);
+        }
     }
 
 

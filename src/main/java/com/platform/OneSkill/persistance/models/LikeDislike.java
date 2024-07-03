@@ -4,8 +4,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Date;
@@ -15,18 +19,18 @@ import java.util.Date;
 @EqualsAndHashCode
 @RequiredArgsConstructor
 @Document(collection = "LikesDislikes")
+@CompoundIndexes({
+        @CompoundIndex(name = "username_videoid_unique_idx", def = "{'username': 1, 'video_id': 1}", unique = true)
+})
 public class LikeDislike {
 
-    @MongoId
-    private String likeId;
+    @Id
+    private String id;
 
-    @Indexed
+    @Field("video_id")
     private String videoId;
 
-    @Indexed
-    private String userId;
+    private String username;
 
-    private String type; // "like" or "dislike"
-    private String timestamp;
-
+    private String type;
 }

@@ -222,36 +222,29 @@ db.createCollection("LikesDislikes", {
    validator: {
       $jsonSchema: {
          bsonType: "object",
-         required: ["like_id", "video_id", "user_id", "type", "timestamp"],
+         required: ["video_id", "username", "type"],
          properties: {
-            like_id: {
-               bsonType: "string",
-               description: "Unique identifier for the like/dislike"
-            },
             video_id: {
                bsonType: "string",
                description: "Identifier of the video being liked/disliked"
             },
-            user_id: {
+            username: {
                bsonType: "string",
                description: "Identifier of the user who liked/disliked"
             },
             type: {
-               enum: ["like", "dislike"],
+               enum: ["like", "dislike", "none"],
                description: "Type of interaction (e.g., 'like', 'dislike')"
-            },
-            timestamp: {
-               bsonType: "string",
-               description: "When the like/dislike was made"
             }
          }
       }
    }
 });
+db.LikesDislikes.createIndex(
+   { username: 1, video_id: 1 },
+   { unique: true }
+);
 
-db.LikesDislikes.createIndex({ like_id: 1 }, { unique: true });
-db.LikesDislikes.createIndex({ video_id: 1 });
-db.LikesDislikes.createIndex({ user_id: 1 });
 
 
 db.createCollection("Shares", {
