@@ -4,9 +4,11 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.platform.OneSkill.dto.*;
+import com.platform.OneSkill.persistance.models.Comment;
 import com.platform.OneSkill.persistance.models.EnrolledVideo;
 import com.platform.OneSkill.persistance.models.LikeDislike;
 import com.platform.OneSkill.persistance.models.Video;
+import com.platform.OneSkill.persistance.repository.CommentRepository;
 import com.platform.OneSkill.persistance.repository.EnrolledVideoRepository;
 import com.platform.OneSkill.persistance.repository.LikeDislikeRepository;
 import com.platform.OneSkill.persistance.repository.VideoRepository;
@@ -43,6 +45,7 @@ public class VideoServiceImpl implements VideoService {
     public static final String USERNAME = "username";
     private final VideoRepository videoRepository;
     private final LikeDislikeRepository likeDislikeRepository;
+    private final CommentRepository commentRepository;
     private final EnrolledVideoRepository enrolledVideoRepository;
     private final GridFsTemplate gridFsTemplate;
     private final GridFsOperations operations;
@@ -145,6 +148,7 @@ public class VideoServiceImpl implements VideoService {
         Video video = foundVideo.orElseThrow();
 
         return new VideoInfoResponseDTO(
+                video.getUsername(),
                 video.getId(),
                 video.getTitle(),
                 video.getDescription(),
@@ -186,6 +190,29 @@ public class VideoServiceImpl implements VideoService {
         } else {
             createNewInteraction(id, interactDTO, requestedAction);
         }
+    }
+
+    @Override
+    public void commentVideo(String id, CommentDTO commentDTO) {
+        Comment comment = new Comment();
+        comment.setVideoId(id);
+        comment.setUsername(commentDTO.username());
+        comment.setContent(commentDTO.content());
+        comment.setTimestamp(TimeUtil.getCurrentZonedDateTime());
+        commentRepository.save(comment);
+    }
+
+    @Override
+    public List<CommentResponseDTO> getVideoComments(String id) {
+
+        List<Comment> comments = commentRepository.findAllByVideoId(id);
+        List<CommentResponseDTO> resultList = new ArrayList<>();
+        comments.forEach(comment -> {
+            CommentResponseDTO commentDTO = new CommentResponseDTO(
+                    comment.getUsername(), comment.getContent(), TimeUtil.getFormattedTime(comment.getTimestamp()));
+            resultList.add(commentDTO);
+        });
+        return resultList;
     }
 
     private void updateInteraction(LikeDislike foundResult, InteractionEnum newType, String videoId, InteractionEnum requestedAction) {

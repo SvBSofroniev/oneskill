@@ -22,4 +22,8 @@ public interface VideoService {
     void registerView(String id);
 
     void interactWithVideo(String id, InteractDTO interactDTO);
+
+    void commentVideo(String id, CommentDTO commentDTO);
+
+    List<CommentResponseDTO> getVideoComments(String id);
 }

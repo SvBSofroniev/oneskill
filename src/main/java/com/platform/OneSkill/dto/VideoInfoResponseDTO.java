@@ -2,6 +2,7 @@ package com.platform.OneSkill.dto;
 
 
 public record VideoInfoResponseDTO(
+        String username,
         String videoId,
         String title,
         String description,

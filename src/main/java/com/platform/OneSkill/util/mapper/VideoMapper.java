@@ -40,6 +40,7 @@ public class VideoMapper {
 
     private static VideoInfoResponseDTO mapModelToResponseInfoDTO(Video video, ImageDTO imageDTO) throws IOException {
         return new VideoInfoResponseDTO(
+                video.getUsername(),
                 video.getVideoId().toString(),
                 video.getTitle(),
                 video.getDescription(),

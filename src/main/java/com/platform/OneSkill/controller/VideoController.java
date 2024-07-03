@@ -78,4 +78,14 @@ public class VideoController {
     public void interact(@PathVariable String id, @RequestBody InteractDTO interactDTO){
         videoService.interactWithVideo(id, interactDTO);
     }
+
+    @PostMapping("/{id}/comment")
+    public void commentVideo(@PathVariable String id, @RequestBody CommentDTO commentDTO){
+        videoService.commentVideo(id, commentDTO);
+    }
+
+    @GetMapping("/{id}/comments")
+    public List<CommentResponseDTO> getComments(@PathVariable String id){
+        return videoService.getVideoComments(id);
+    }
 }

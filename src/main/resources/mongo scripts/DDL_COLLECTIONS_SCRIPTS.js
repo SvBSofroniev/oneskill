@@ -149,17 +149,13 @@ db.createCollection("Comments", {
    validator: {
       $jsonSchema: {
          bsonType: "object",
-         required: ["comment_id", "video_id", "user_id", "content", "timestamp"],
+         required: ["video_id", "username", "content", "timestamp"],
          properties: {
-            comment_id: {
-               bsonType: "string",
-               description: "Unique identifier for the comment"
-            },
             video_id: {
                bsonType: "string",
                description: "Identifier of the video being commented on"
             },
-            user_id: {
+            username: {
                bsonType: "string",
                description: "Identifier of the user who made the comment"
             },
@@ -176,9 +172,6 @@ db.createCollection("Comments", {
    }
 });
 
-db.Comments.createIndex({ comment_id: 1 }, { unique: true });
-db.Comments.createIndex({ video_id: 1 });
-db.Comments.createIndex({ user_id: 1 });
 
 db.createCollection("Ratings", {
    validator: {
