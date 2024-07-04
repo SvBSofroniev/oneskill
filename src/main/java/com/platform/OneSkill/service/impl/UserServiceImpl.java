@@ -1,13 +1,16 @@
 package com.platform.OneSkill.service.impl;
 
 import com.platform.OneSkill.dto.SignupRequest;
+import com.platform.OneSkill.dto.UpdateUserDTO;
 import com.platform.OneSkill.dto.UserDTO;
 import com.platform.OneSkill.exception.UserNotFoundException;
 import com.platform.OneSkill.persistance.models.User;
 import com.platform.OneSkill.persistance.repository.UserRepository;
 import com.platform.OneSkill.security.dto.UserInfoDetails;
+import com.platform.OneSkill.service.EmailService;
 import com.platform.OneSkill.service.UserService;
 import com.platform.OneSkill.util.RolesEnum;
+import com.platform.OneSkill.util.TimeUtil;
 import com.platform.OneSkill.util.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +37,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder encoder;
+    private final EmailService emailService;
+
 
     @Transactional
     @Override
@@ -94,6 +99,42 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 userRepository.save(user);
             });
         }
+    }
+
+    @Override
+    public void updateUser(String username, UpdateUserDTO userDTO) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            if (userDTO.firstname() != null && !userDTO.firstname().isEmpty()) {
+                user.setFirstname(userDTO.firstname());
+            }
+            if (userDTO.lastname() != null && !userDTO.lastname().isEmpty()) {
+                user.setLastname(userDTO.lastname());
+            }
+            if (userDTO.password() != null && !userDTO.password().isEmpty()) {
+                String encodedPassword = encoder.encode(userDTO.password());
+                user.setPassword(encodedPassword);
+            }
+
+            user.setUpdatedAt(TimeUtil.getCurrentZonedDateTime());
+
+            String email = userRepository.save(user).getEmail();
+
+            sendUpdateNotificationEmail(user.getUsername(), email);
+        } else {
+            log.error("User not found with username: {}", username);
+        }
+    }
+
+
+    private void sendUpdateNotificationEmail(String username, String email) {
+
+        String subject = "User Profile Updated";
+        String text = "Hello,\n\nUser " + username + "'s profile has been updated successfully.";
+
+        emailService.sendSimpleMessage(email, subject, text);
     }
 
     @Override

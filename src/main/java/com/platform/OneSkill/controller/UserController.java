@@ -1,5 +1,6 @@
 package com.platform.OneSkill.controller;
 
+import com.platform.OneSkill.dto.UpdateUserDTO;
 import com.platform.OneSkill.dto.UserDTO;
 import com.platform.OneSkill.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,10 @@ public class UserController {
     @PatchMapping("/{username}/roles/{role}")
     public void updateRoles(@PathVariable String username, @PathVariable String role){
         userService.updateRole(username, role);
+    }
+
+    @PostMapping("/{username}/update")
+    public void updateUser(@PathVariable String username, @RequestBody UpdateUserDTO userDTO){
+        userService.updateUser(username,userDTO);
     }
 }
