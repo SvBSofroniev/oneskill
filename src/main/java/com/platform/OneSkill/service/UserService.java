@@ -5,7 +5,6 @@ import com.platform.OneSkill.dto.UpdateUserDTO;
 import com.platform.OneSkill.dto.UserDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     boolean createUser(SignupRequest signupRequest);
@@ -17,4 +16,6 @@ public interface UserService {
     void updateRole(String username, String role);
 
     void updateUser(String username, UpdateUserDTO userDTO);
+
+    Boolean updatePassword(String email, String password);
 }

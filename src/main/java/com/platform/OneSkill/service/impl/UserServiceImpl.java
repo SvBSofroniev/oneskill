@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         try {
             User user = new User();
-            user.setRoles(Set.of(RolesEnum.USER.getValue()));
+            user.setRoles(Set.of(RolesEnum.USER.getValue(), RolesEnum.LECTOR.getValue()));
             user.setPassword(encoder.encode(signupRequest.password()));
             user.setFirstname(signupRequest.firstname());
             user.setLastname(signupRequest.lastname());
@@ -84,7 +83,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     @Override
     public void updateRole(String username, String role) {
-        String message;
         RolesEnum roleEnum = RolesEnum.fromString(role);
         if (RolesEnum.isValidRole(role)){
             Optional<User> foundUser = userRepository.findByUsername(username);
@@ -96,10 +94,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 }else {
                     user.getRoles().add(roleEnum.getValue());
                 }
-                userRepository.save(user);
+                String email = userRepository.save(user).getEmail();
+                sendUpdateRoleNotificationEmail(username, email);
             });
         }
     }
+
+    private void sendUpdateRoleNotificationEmail(String username, String email){
+        String subject = "User Roles Updated";
+        String text = "Hello,\n\nUser " + username + "'s roles has been updated successfully.";
+        emailService.sendSimpleMessage(email, subject, text);
+    }
+
 
     @Override
     public void updateUser(String username, UpdateUserDTO userDTO) {
@@ -126,6 +132,22 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         } else {
             log.error("User not found with username: {}", username);
         }
+    }
+
+    @Override
+    public Boolean updatePassword(String email, String password) {
+        Optional<User> optionalUser = userRepository.findByUsername(email);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            if (password != null) {
+                String encodedPassword = encoder.encode(password);
+                user.setPassword(encodedPassword);
+            }
+            userRepository.save(user);
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
 

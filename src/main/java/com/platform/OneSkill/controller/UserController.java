@@ -4,6 +4,7 @@ import com.platform.OneSkill.dto.UpdateUserDTO;
 import com.platform.OneSkill.dto.UserDTO;
 import com.platform.OneSkill.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,5 +34,10 @@ public class UserController {
     @PostMapping("/{username}/update")
     public void updateUser(@PathVariable String username, @RequestBody UpdateUserDTO userDTO){
         userService.updateUser(username,userDTO);
+    }
+
+    @PutMapping("/reset_password/{email}")
+    public Boolean resetPassword(@PathVariable String email, @RequestParam("password") String password){
+        return userService.updatePassword(email, password);
     }
 }
