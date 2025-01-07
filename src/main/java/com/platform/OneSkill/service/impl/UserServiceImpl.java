@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Boolean updatePassword(String email, String password) {
-        Optional<User> optionalUser = userRepository.findByUsername(email);
+        Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 

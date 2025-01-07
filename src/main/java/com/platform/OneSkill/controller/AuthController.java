@@ -47,4 +47,9 @@ public class AuthController {
             throw new UsernameNotFoundException("Invalid user request!");
         }
     }
+
+    @PatchMapping("/reset")
+    public Boolean resetPassword(@RequestParam("email") String email, @RequestParam("password") String password){
+        return userService.updatePassword(email, password);
+    }
 }

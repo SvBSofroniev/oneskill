@@ -38,8 +38,7 @@ public class SecurityConfig  {
                                 , "/enrolled/**"
                                 , "/users/**")
                             .hasAnyAuthority(RolesEnum.USER.getValue(), RolesEnum.ADMIN.getValue())
-                        .requestMatchers("/auth/login", "/auth/register").permitAll()
-
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/reset").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

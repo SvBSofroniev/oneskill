@@ -35,9 +35,4 @@ public class UserController {
     public void updateUser(@PathVariable String username, @RequestBody UpdateUserDTO userDTO){
         userService.updateUser(username,userDTO);
     }
-
-    @PutMapping("/reset_password/{email}")
-    public Boolean resetPassword(@PathVariable String email, @RequestParam("password") String password){
-        return userService.updatePassword(email, password);
-    }
 }
